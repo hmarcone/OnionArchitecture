@@ -4,4 +4,9 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OnionArchitecture.DomainLayer\OnionArchitecture.DomainLayer.csproj" />
+    <ProjectReference Include="..\OnionArchitecture.RepositoryLayer\OnionArchitecture.RepositoryLayer.csproj" />
+  </ItemGroup>
+
 </Project>
