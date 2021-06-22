@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnionArchitecture.DomainLayer.Models;
+using System;
 
 namespace OnionArchitecture.DomainLayer.EntityMapper
 {
@@ -42,6 +43,14 @@ namespace OnionArchitecture.DomainLayer.EntityMapper
             builder.Property(x => x.IsActive)
               .HasColumnName("is_active")
                  .HasColumnType("bit");
+
+            builder.HasData(
+                new Customer { Id = 1, CustomerName = "João Augusto", PaymentType = "Cartão", PurchasesProduct = "S", CreatedDate = DateTime.Now, ModifiedDate = DateTime.Now, IsActive = false },
+                new Customer { Id = 2, CustomerName = "Maria Augusta", PaymentType = "Dinheiro", PurchasesProduct = "S", CreatedDate = DateTime.Now, ModifiedDate = DateTime.Now, IsActive = true },
+                new Customer { Id = 3, CustomerName = "José Augusto Rodrigues", PaymentType = "Cheque", PurchasesProduct = "S", CreatedDate = DateTime.Now, ModifiedDate = DateTime.Now, IsActive = true },
+                new Customer { Id = 4, CustomerName = "Fernando Medeiros de Almeida", PaymentType = "Cartão Débito", PurchasesProduct = "S", CreatedDate = DateTime.Now, ModifiedDate = DateTime.Now, IsActive = false },
+                new Customer { Id = 5, CustomerName = "João Alfredo", PaymentType = "Pix", PurchasesProduct = "S", CreatedDate = DateTime.Now, ModifiedDate = DateTime.Now, IsActive = true }
+            );
         }
     }
 }
