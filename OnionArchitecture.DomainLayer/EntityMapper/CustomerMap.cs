@@ -8,8 +8,14 @@ namespace OnionArchitecture.DomainLayer.EntityMapper
     {
         public void Configure(EntityTypeBuilder<Customer> builder)
         {
+
             builder.HasKey(x => x.Id)
                             .HasName("pk_customerid");
+
+            builder.Property(x => x.CustomerName)
+                .HasColumnName("Customer_Name")
+                .HasColumnType("NVARCHAR(200)")
+                .IsRequired();
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd()
                 .HasColumnName("id")

@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OnionArchitecture.RepositoryLayer;
 
 namespace OnionArchitecture.WebAPI
 {
@@ -25,6 +27,10 @@ namespace OnionArchitecture.WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OnionArchitecture.WebAPI", Version = "v1" });
             });
+
+            #region Connection String  
+            services.AddDbContext<ApplicationDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
