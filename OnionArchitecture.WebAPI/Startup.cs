@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using OnionArchitecture.RepositoryLayer;
+using OnionArchitecture.RepositoryLayer.RespositoryPattern;
+using OnionArchitecture.ServicesLayer.CustomerService;
 
 namespace OnionArchitecture.WebAPI
 {
@@ -30,6 +32,11 @@ namespace OnionArchitecture.WebAPI
 
             #region Connection String  
             services.AddDbContext<ApplicationDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
+            #endregion
+
+            #region Services Injected  
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient<ICustomerService, CustomerService>();
             #endregion
         }
 
