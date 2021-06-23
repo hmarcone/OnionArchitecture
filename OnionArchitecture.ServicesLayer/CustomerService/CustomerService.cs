@@ -1,6 +1,9 @@
-﻿using OnionArchitecture.DomainLayer.Models;
+﻿using AutoMapper;
+using OnionArchitecture.DomainLayer.Models;
 using OnionArchitecture.RepositoryLayer.RespositoryPattern;
+using OnionArchitecture.ServicesLayer.ViewModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnionArchitecture.ServicesLayer.CustomerService
 {
@@ -8,22 +11,26 @@ namespace OnionArchitecture.ServicesLayer.CustomerService
     {
         #region Property  
         private IRepository<Customer> _repository;
+        private readonly IMapper _mapper;
         #endregion
 
         #region Constructor  
-        public CustomerService(IRepository<Customer> repository)
+        public CustomerService(IMapper mapper, IRepository<Customer> repository)
         {
             _repository = repository;
+            _mapper = mapper;
         }
         #endregion
 
-        public IEnumerable<Customer> GetAllCustomers()
+        public async Task<IEnumerable<CustomerViewModel>> GetAllCustomers()
         {
-            return _repository.GetAll();
+            var result = await _repository.GetAll();
+            return _mapper.Map<IEnumerable<CustomerViewModel>>(result);
         }
-        public Customer GetCustomer(int id)
+        public async Task<CustomerViewModel> GetCustomer(int id)
         {
-            return _repository.GetById(id);
+            var result = await _repository.GetById(id);
+            return _mapper.Map<CustomerViewModel>(result);
         }
         public void InsertCustomer(Customer customer)
         {
@@ -36,8 +43,11 @@ namespace OnionArchitecture.ServicesLayer.CustomerService
 
         public void DeleteCustomer(int id)
         {
-            Customer customer = GetCustomer(id);
-            _repository.Remove(customer);
+            var customer = GetCustomer(id);
+            var customerMap = _mapper.Map<Customer>(customer);
+
+            _repository.Remove(customerMap);
+
             _repository.SaveChanges();
         }
     }

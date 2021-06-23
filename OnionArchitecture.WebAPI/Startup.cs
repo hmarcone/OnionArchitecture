@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using OnionArchitecture.RepositoryLayer;
 using OnionArchitecture.RepositoryLayer.RespositoryPattern;
 using OnionArchitecture.ServicesLayer.CustomerService;
+using OnionArchitecture.ServicesLayer.Mappings;
+using OnionArchitecture.WebAPI.MappingConfig;
 
 namespace OnionArchitecture.WebAPI
 {
@@ -29,6 +31,9 @@ namespace OnionArchitecture.WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "OnionArchitecture.WebAPI", Version = "v1" });
             });
+
+            services.AddAutoMapperConfiguration();
+            //services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
 
             #region Connection String  
             services.AddDbContext<ApplicationDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
