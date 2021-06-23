@@ -3,6 +3,7 @@ using OnionArchitecture.DomainLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
 {
@@ -32,14 +33,14 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
             _applicationDbContext.SaveChanges();
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(int id)
         {
-            return entities.SingleOrDefault(c => c.Id == id);
+            return await entities.SingleOrDefaultAsync(c => c.Id == id);
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return entities.AsEnumerable();
+            return await entities.ToListAsync();
         }
 
         public void Insert(T entity)
