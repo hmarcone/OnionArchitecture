@@ -36,7 +36,7 @@ namespace OnionArchitecture.WebAPI.Controllers
                 return Ok(result);
             }
 
-            return NotFound("Nenhum registro encontrado!");
+            return NotFound("Nenhum registro encontrado para este identificador!");
             //return NotFound(
             //        new
             //        {
@@ -60,13 +60,13 @@ namespace OnionArchitecture.WebAPI.Controllers
         }
 
         [HttpPost(nameof(InsertCustomer))]
-        //[Route("insertCustomer")]
         [ValidacaoModelStateCustomizado]
-        public IActionResult InsertCustomer(CustomerViewModelInput customerViewModel)
+        public async Task<IActionResult> InsertCustomer(CustomerViewModelInput customerViewModel)
         {
             var customer = _mapper.Map<Customer>(customerViewModel);
 
-            _customerService.InsertCustomer(customer);
+            await _customerService.InsertCustomer(customer);
+
             return Created("Dados inseridos com sucesso!", customerViewModel);            
         }
 
@@ -84,7 +84,7 @@ namespace OnionArchitecture.WebAPI.Controllers
             customerViewModel.Id = id;
             var customer = _mapper.Map<Customer>(customerViewModel);
 
-            _customerService.UpdateCustomer(customer);
+            await _customerService.UpdateCustomer(customer);
 
             //return new ObjectResult(customerViewModel);
 
@@ -102,7 +102,9 @@ namespace OnionArchitecture.WebAPI.Controllers
                 return NotFound("Código do cliente inválido ou inexistente!");
             }
 
-            _customerService.DeleteCustomer(id);
+            //await _customerService.DeleteCustomer(id);
+            await _customerService.DeleteCustomer(result);
+
             return Ok("Registro deletado com sucesso!");
 
         }
