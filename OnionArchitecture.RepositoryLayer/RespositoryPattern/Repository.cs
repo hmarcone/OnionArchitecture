@@ -35,7 +35,7 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
 
         public async Task<T> GetById(int id)
         {
-            return await entities.SingleOrDefaultAsync(c => c.Id == id);
+            return await entities.AsNoTracking().SingleOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<IEnumerable<T>> GetAll()
