@@ -2,13 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using OnionArchitecture.DomainLayer.Models;
 using OnionArchitecture.ServicesLayer.CustomerService;
+using OnionArchitecture.ServicesLayer.Filters;
 using OnionArchitecture.ServicesLayer.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace OnionArchitecture.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/customer")]
     [ApiController]
     public class CustomerController : Controller
     {
@@ -25,7 +26,7 @@ namespace OnionArchitecture.WebAPI.Controllers
         }
         #endregion
 
-        [HttpGet(nameof(GetCustomer))]
+        [HttpGet(nameof(GetCustomer) + "/{id}")]
         public async Task<IActionResult> GetCustomer(int id)
         {
             var result = await _customerService.GetCustomer(id);
@@ -35,7 +36,14 @@ namespace OnionArchitecture.WebAPI.Controllers
                 return Ok(result);
             }
 
-            return BadRequest("Nenhum registro encontrado!");
+            return NotFound("Nenhum registro encontrado!");
+            //return NotFound(
+            //        new
+            //        {
+            //            Mensagem = "Código de cliente inválido ou item inexistente.",
+            //            Erro = true
+            //        });
+            //return await Task.FromResult(new ActionResult(404, "", result));
         }
 
         [HttpGet(nameof(GetAllCustomer))]
@@ -52,37 +60,49 @@ namespace OnionArchitecture.WebAPI.Controllers
         }
 
         [HttpPost(nameof(InsertCustomer))]
-        public IActionResult InsertCustomer(CustomerViewModel customerViewModel)
+        //[Route("insertCustomer")]
+        [ValidacaoModelStateCustomizado]
+        public IActionResult InsertCustomer(CustomerViewModelInput customerViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                var customer = _mapper.Map<Customer>(customerViewModel);
+            var customer = _mapper.Map<Customer>(customerViewModel);
 
-                _customerService.InsertCustomer(customer);
-                return Ok("Dados inseridos com sucesso!");
-            }
-            else
-            {
-                //ToDo: verificar depois a necessidade desta validação do modelState
-                var message = string.Join(" | ", ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage));
-
-                return BadRequest(message);
-            }
+            _customerService.InsertCustomer(customer);
+            return Created("Dados inseridos com sucesso!", customerViewModel);            
         }
 
-        [HttpPut(nameof(UpdateCustomer))]
-        public IActionResult UpdateCustomer(Customer customer)
+        [HttpPut(nameof(UpdateCustomer) + "/{id}")]
+        [ValidacaoModelStateCustomizado]
+        public async Task<IActionResult> UpdateCustomer(int id, CustomerViewModelInput customerViewModel)
         {
+            var customerDb = await GetCustomer(id);
+
+            if (customerDb is null)
+            {
+                return NotFound("Código do cliente inválido ou inexistente!");
+            }
+
+            customerViewModel.Id = id;
+            var customer = _mapper.Map<Customer>(customerViewModel);
+
             _customerService.UpdateCustomer(customer);
-            return Ok("Dados alterados com sucess!");
+
+            //return new ObjectResult(customerViewModel);
+
+            //return Ok("Dados alterados com sucess!");
+            return Ok(customerViewModel);
         }
 
-        [HttpDelete(nameof(DeleteCustomer))]
-        public IActionResult DeleteCustomer(int Id)
+        [HttpDelete(nameof(DeleteCustomer) + "/{id}")]
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
-            _customerService.DeleteCustomer(Id);
+            var result = await _customerService.GetCustomer(id);
+
+            if (result is null)
+            {
+                return NotFound("Código do cliente inválido ou inexistente!");
+            }
+
+            _customerService.DeleteCustomer(id);
             return Ok("Registro deletado com sucesso!");
 
         }

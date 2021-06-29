@@ -1,11 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace OnionArchitecture.ServicesLayer.ViewModels
 {
-    public class CustomerViewModel
+    public class CustomerViewModelInput
     {
+        //[JsonIgnore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "O campo nome é obrigatório!")]

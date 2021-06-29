@@ -8,7 +8,7 @@ namespace OnionArchitecture.ServicesLayer.Mappings
     {
         public ViewModelToDomainMappingProfile()
         {
-            CreateMap<CustomerViewModel, Customer>();
+            CreateMap<CustomerViewModelInput, Customer>();
         }
     }
 }

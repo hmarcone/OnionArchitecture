@@ -22,15 +22,18 @@ namespace OnionArchitecture.ServicesLayer.CustomerService
         }
         #endregion
 
-        public async Task<IEnumerable<CustomerViewModel>> GetAllCustomers()
+        public async Task<IEnumerable<CustomerViewModelInput>> GetAllCustomers()
         {
             var result = await _repository.GetAll();
-            return _mapper.Map<IEnumerable<CustomerViewModel>>(result);
+            return _mapper.Map<IEnumerable<CustomerViewModelInput>>(result);
         }
-        public async Task<CustomerViewModel> GetCustomer(int id)
+
+        public async Task<Customer> GetCustomer(int id)
         {
             var result = await _repository.GetById(id);
-            return _mapper.Map<CustomerViewModel>(result);
+            return result;
+
+            //return _mapper.Map<CustomerViewModelInput>(result);
         }
         public void InsertCustomer(Customer customer)
         {
@@ -44,9 +47,9 @@ namespace OnionArchitecture.ServicesLayer.CustomerService
         public void DeleteCustomer(int id)
         {
             var customer = GetCustomer(id);
-            var customerMap = _mapper.Map<Customer>(customer);
+            //var customerMap = _mapper.Map<Customer>(customer);
 
-            _repository.Remove(customerMap);
+            _repository.Remove(customer.Result);
 
             _repository.SaveChanges();
         }
