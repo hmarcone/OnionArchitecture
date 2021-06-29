@@ -36,9 +36,9 @@ namespace OnionArchitecture.ServicesLayer.CustomerService
 
             //return _mapper.Map<CustomerViewModelInput>(result);
         }
-        public async Task InsertCustomer(Customer customer)
+        public async Task<int> InsertCustomer(Customer customer)
         {
-            await _repository.Insert(customer);
+            return await _repository.Insert(customer);
         }
         public async Task UpdateCustomer(Customer customer)
         {

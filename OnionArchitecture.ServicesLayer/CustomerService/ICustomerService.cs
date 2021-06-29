@@ -10,7 +10,7 @@ namespace OnionArchitecture.ServicesLayer.CustomerService
         Task<IEnumerable<CustomerViewModelInput>> GetAllCustomers();
         Task<Customer> GetCustomer(int id);
 
-        Task InsertCustomer(Customer customer);
+        Task<int> InsertCustomer(Customer customer);
         Task UpdateCustomer(Customer customer);
         Task DeleteCustomer(Customer customer);
     }

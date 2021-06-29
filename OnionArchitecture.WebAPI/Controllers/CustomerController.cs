@@ -65,7 +65,9 @@ namespace OnionArchitecture.WebAPI.Controllers
         {
             var customer = _mapper.Map<Customer>(customerViewModel);
 
-            await _customerService.InsertCustomer(customer);
+            var id = await _customerService.InsertCustomer(customer);
+
+            customerViewModel.Id = id;
 
             return Created("Dados inseridos com sucesso!", customerViewModel);            
         }

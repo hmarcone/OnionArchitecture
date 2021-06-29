@@ -43,16 +43,18 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
             return await entities.ToListAsync();
         }
 
-        public async Task Insert(T entity)
+        public async Task<int> Insert(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
             
-             entities.Add(entity);
+            entities.Add(entity);
 
             await _applicationDbContext.SaveChangesAsync();
+
+            return entity.Id;
         }
 
         public void Remove(T entity)

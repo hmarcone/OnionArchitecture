@@ -7,9 +7,9 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
     public interface IRepository<T> where T : BaseEntity
     {
         Task<IEnumerable<T>> FindAllAsync();
-        Task<T> FindAsync(int id);  
+        Task<T> FindAsync(int id);
 
-        Task Insert(T entity);
+        Task<int> Insert(T entity);
         Task Update(T entity);
         Task Delete(T entity);
         void Remove(T entity);
