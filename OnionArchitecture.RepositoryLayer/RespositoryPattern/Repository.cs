@@ -22,7 +22,7 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
         }
         #endregion
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
             if( entity == null)
             {
@@ -30,20 +30,20 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
             }
 
             entities.Remove(entity);
-            _applicationDbContext.SaveChanges();
+            await _applicationDbContext.SaveChangesAsync();
         }
 
-        public async Task<T> GetById(int id)
+        public async Task<T> FindAsync(int id)
         {
             return await entities.AsNoTracking().SingleOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> FindAllAsync()
         {
             return await entities.ToListAsync();
         }
 
-        public void Insert(T entity)
+        public async Task<int> Insert(T entity)
         {
             if (entity == null)
             {
@@ -51,7 +51,10 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
             }
             
             entities.Add(entity);
-            _applicationDbContext.SaveChanges();
+
+            await _applicationDbContext.SaveChangesAsync();
+
+            return entity.Id;
         }
 
         public void Remove(T entity)
@@ -60,15 +63,16 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
             {
                 throw new ArgumentNullException(nameof(entity));
             }
+
             entities.Remove(entity);
         }
 
-        public void SaveChanges()
+        public async Task SaveChanges()
         {
-            _applicationDbContext.SaveChanges();
+            await _applicationDbContext.SaveChangesAsync();
         }
 
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             if (entity == null)
             {
@@ -76,7 +80,7 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
             }
 
             entities.Update(entity);
-            _applicationDbContext.SaveChanges();
+            await _applicationDbContext.SaveChangesAsync();
         }
     }
 }

@@ -6,13 +6,13 @@ namespace OnionArchitecture.RepositoryLayer.RespositoryPattern
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAll();
-        Task<T> GetById(int id);  
+        Task<IEnumerable<T>> FindAllAsync();
+        Task<T> FindAsync(int id);
 
-        void Insert(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        Task<int> Insert(T entity);
+        Task Update(T entity);
+        Task Delete(T entity);
         void Remove(T entity);
-        void SaveChanges();
+        Task SaveChanges();
     }
 }

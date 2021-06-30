@@ -24,34 +24,35 @@ namespace OnionArchitecture.ServicesLayer.CustomerService
 
         public async Task<IEnumerable<CustomerViewModelInput>> GetAllCustomers()
         {
-            var result = await _repository.GetAll();
+            var result = await _repository.FindAllAsync();
             return _mapper.Map<IEnumerable<CustomerViewModelInput>>(result);
         }
 
         public async Task<Customer> GetCustomer(int id)
         {
-            var result = await _repository.GetById(id);
-            return result;
+            return await _repository.FindAsync(id);
+            //var result = await _repository.FindAsync(id);
+            //return result;
 
             //return _mapper.Map<CustomerViewModelInput>(result);
         }
-        public void InsertCustomer(Customer customer)
+        public async Task<int> InsertCustomer(Customer customer)
         {
-            _repository.Insert(customer);
+            return await _repository.Insert(customer);
         }
-        public void UpdateCustomer(Customer customer)
+        public async Task UpdateCustomer(Customer customer)
         {
-            _repository.Update(customer);
+            await _repository.Update(customer);
         }
 
-        public void DeleteCustomer(int id)
+        public async Task DeleteCustomer(Customer customer)
         {
-            var customer = GetCustomer(id);
+            //var customer = GetCustomer(id);
             //var customerMap = _mapper.Map<Customer>(customer);
 
-            _repository.Remove(customer.Result);
+            _repository.Remove(customer);
 
-            _repository.SaveChanges();
+            await _repository.SaveChanges();
         }
     }
 }
